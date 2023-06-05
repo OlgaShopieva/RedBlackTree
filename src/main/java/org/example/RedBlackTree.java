@@ -2,16 +2,18 @@ package org.example;
 
 public class RedBlackTree {
     private Node root;
+    private static final boolean RED = true;
+    private static final boolean BLACK = false;
 
     public boolean add(int value){
         if (root != null) {
             boolean result = addNode(root, value);
             root = rebalance(root);
-            root.color = Color.BLACK;
+            root.color = BLACK;
             return result;
         } else {
             root = new Node();
-            root.color = Color.BLACK;
+            root.color = BLACK;
             root.value = value;
             return true;
         }
@@ -28,7 +30,7 @@ public class RedBlackTree {
                     return result;
                 } else {
                     node.lefChild = new Node();
-                    node.lefChild.color = Color.RED;
+                    node.lefChild.color = RED;
                     node.lefChild.value = value;
                     return true;
                 }
@@ -39,7 +41,7 @@ public class RedBlackTree {
                     return result;
                 } else {
                     node.rightChild = new Node();
-                    node.rightChild.color = Color.RED;
+                    node.rightChild.color = RED;
                     node.rightChild.value = value;
                     return true;
                 }
@@ -52,18 +54,18 @@ public class RedBlackTree {
        boolean needRebalance;
        do {
            needRebalance = false;
-           if (result.rightChild != null && result.rightChild.color == Color.RED &&
-                   (result.lefChild == null || result.lefChild.color == Color.BLACK)) {
+           if (result.rightChild != null && result.rightChild.color == RED &&
+                   (result.lefChild == null || result.lefChild.color == BLACK)) {
                needRebalance = true;
                result = rightSwap(result);
            }
-           if (result.lefChild != null && result.lefChild.color == Color.RED &&
-                    result.lefChild.lefChild != null && result.lefChild.lefChild.color == Color.RED){
+           if (result.lefChild != null && result.lefChild.color == RED &&
+                    result.lefChild.lefChild != null && result.lefChild.lefChild.color == RED){
                needRebalance = true;
                result = leftSwap(result);
            }
-           if (result.lefChild != null && result.lefChild.color == Color.RED &&
-                    result.rightChild != null && result.rightChild.color == Color.RED){
+           if (result.lefChild != null && result.lefChild.color == RED &&
+                    result.rightChild != null && result.rightChild.color == RED){
                needRebalance = true;
                colorSwap(result);
            }
@@ -77,7 +79,7 @@ public class RedBlackTree {
         rightChild.lefChild = node;
         node.rightChild = betweenChild;
         rightChild.color = node.color;
-        node.color = Color.RED;
+        node.color = RED;
         return rightChild;
     }
     private Node leftSwap(Node node){
@@ -86,17 +88,17 @@ public class RedBlackTree {
         leftChild.rightChild = node.lefChild;
         node.lefChild = betweenChild;
         leftChild.color = node.color;
-        node.color = Color.RED;
+        node.color = RED;
         return leftChild;
     }
     private void colorSwap(Node node){
-        node.rightChild.color = Color.BLACK;
-        node.lefChild.color = Color.BLACK;
-        node.color = Color.RED;
+        node.rightChild.color = BLACK;
+        node.lefChild.color = BLACK;
+        node.color = RED;
     }
     private class Node{
         private int value;
-        private Color color;
+        private boolean color;
         private Node lefChild;
         private Node rightChild;
 
@@ -108,7 +110,5 @@ public class RedBlackTree {
                     "}";
         }
     }
-    private enum Color{
-        RED, BLACK
-    }
+
 }
